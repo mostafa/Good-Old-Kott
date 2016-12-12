@@ -4,7 +4,6 @@
 from kcore.ksingleton import kSingleton
 from kcore import krand
 from kplug import KPlugBase
-from pluginbase import PluginBase
 from kcore.kconf import __kott_kplugs_dir__
 
 import md5
@@ -13,49 +12,53 @@ import string
 import random
 import threading
 import time
-
+import sys
+import os
 
 @kSingleton
 class Kott:
-    __mem__ = None
-    __tag__ = None
-    __plugin_base__ = PluginBase(package="kott.kplugs")
-    __plugin_source__ = None
+    __mem__ = {}
+    __tag__ = {}
+    __kplugs__ = []
     # __write_semaphore__ = asyncio.Lock()
 
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
 
     def __init__(self):
-        self.__mem__ = {}
-        self.__tag__ = {}
-        # TODO: please visit http://pluginbase.pocoo.org/ for more
-        # information
-        self.__plugin_source__ = self.__plugin_base__.make_plugin_source(
-            searchpath=__kott_kplugs_dir__)
+        pass
 
-    def get(self, key):
-        return self.__mem__[key]
+    def load_kplug(self, kplug_instance):
+        self.__kplugs__.append(kplug_instance)
+        self.__kplugs__.sort(lambda x,y: x.priority() < y.priority())
+        return kplug_instance.on_load()
 
-    def get_tagged_keys(self, tag):
-        if tag in self.__tag__:
-            return self.__tag__[tag]
-        return None
+    def get(self, key, **kwargs):
+        value = self.__mem__[key]
 
-    def set(self, data, tag=KOTT_UNTAGGED_DATA):
+        for kplug in self.__kplugs__:
+            value = kplug.on_get(key, value, **kwargs)
+
+        return value
+
+    def set(self, data, **kwargs):
         key = md5.md5(krand.kRandStr(16) + str(time.time())).hexdigest()
+        for kplug in self.__kplugs__:
+            data = kplug.on_set(key, data, **kwargs)
         self.__mem__[key] = data
-        if tag in self.__tag__:
-            self.__tag__[tag].append(key)
-        else:
-            self.__tag__[tag] = [key]
         return key
 
-    def pop(self, key):
+    def pop(self, key, **kwargs):
         if key in self.__mem__:
-            return self.__mem__.pop(key)
+            data = self.get(key, **kwargs)
+            self.delete(key, **kwargs)
+            return data
         return None
 
-    def cleanup(self):
+    def delete(self, key, **kwargs):
+        if key in self.__mem__:
+            self.__mem__.pop(key)
+
+    def cleanup(self, **kwargs):
         self.__mem__ = {}
 
 # print (type(Kott))

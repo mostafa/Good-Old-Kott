@@ -4,12 +4,13 @@
 
 def kSingleton(class_instance):
     """docstring."""
-    k_instances = {}
+    # protected instance
+    _k_instances_ = {}
 
     def get_instance():
         """docstring."""
-        if class_instance not in k_instances:
-            k_instances[class_instance] = class_instance()
-        return k_instances[class_instance]
+        if class_instance not in _k_instances_:
+            _k_instances_[class_instance] = class_instance()
+        return _k_instances_[class_instance]
 
     return get_instance
