@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-from kott import __kott_author__
-from kott import __kott_url__
-from kott import __kott_name__
-from kott import __kott_version__
-from kott import __kott_packages__
-from kott import __kott_description__
-from kott import __kott_author_email__
-from kott import __kott_package_dir__
+import kott.kcore.kconf
+from kott.kcore.kconf import __kott_author__
+from kott.kcore.kconf import __kott_url__
+from kott.kcore.kconf import __kott_name__
+from kott.kcore.kconf import __kott_version__
+from kott.kcore.kconf import __kott_packages__
+from kott.kcore.kconf import __kott_description__
+from kott.kcore.kconf import __kott_author_email__
+from kott.kcore.kconf import __kott_package_dir__
 
 setup(name=__kott_name__,
       version=__kott_version__,

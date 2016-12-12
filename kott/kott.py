@@ -4,6 +4,8 @@
 from kcore.ksingleton import kSingleton
 from kcore import krand
 from kplug import KPlugBase
+from pluginbase import PluginBase
+from kcore.kconf import __kott_kplugs_dir__
 
 import md5
 import time
@@ -12,10 +14,13 @@ import random
 import threading
 import time
 
+
 @kSingleton
 class Kott:
     __mem__ = None
     __tag__ = None
+    __plugin_base__ = PluginBase(package="kott.kplugs")
+    __plugin_source__ = None
     # __write_semaphore__ = asyncio.Lock()
 
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
@@ -23,6 +28,10 @@ class Kott:
     def __init__(self):
         self.__mem__ = {}
         self.__tag__ = {}
+        # TODO: please visit http://pluginbase.pocoo.org/ for more
+        # information
+        self.__plugin_source__ = self.__plugin_base__.make_plugin_source(
+            searchpath=__kott_kplugs_dir__)
 
     def get(self, key):
         return self.__mem__[key]
@@ -32,7 +41,7 @@ class Kott:
             return self.__tag__[tag]
         return None
 
-    def set(self, data, tag = KOTT_UNTAGGED_DATA):
+    def set(self, data, tag=KOTT_UNTAGGED_DATA):
         key = md5.md5(krand.kRandStr(16) + str(time.time())).hexdigest()
         self.__mem__[key] = data
         if tag in self.__tag__:
