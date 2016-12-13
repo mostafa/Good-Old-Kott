@@ -28,6 +28,8 @@ class KStudent(KPlugBase):
 Kott().load_kplug(KStudent())
 Kott().load_kplug(ktags.KTags())
 Kott().set("Hello Kotto!")
+Kott().set("Wuzzup Kotto?")
+Kott().set("Bad Kotto!!!", tag="bad")
 
 s1 = Student("Sina", "F-")
 s2 = Student("Mostafa", "F+")
@@ -37,7 +39,12 @@ Kott().set(s1, tag="Coder")
 Kott().set(s2, tag="Coder")
 Kott().set(s3, tag="Coder")
 
-print ("Finding Sina...")
+print ("\nFinding the bad...")
+res = Kott().find(tag="bad")
+for r in res:
+    print Kott().get(r)
+
+print ("\nFinding Sina...")
 res = Kott().find(name="Sina")
 for r in res:
     print Kott().get(r)
