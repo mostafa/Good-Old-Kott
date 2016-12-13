@@ -4,7 +4,7 @@
 
 from kcore.ksingleton import kSingleton
 from kcore import krand
-from kplug import KPlugBase, EVERYTHING
+from kplug import KPlugBase
 from kcore.kconf import __kott_kplugs_dir__
 
 import md5
@@ -15,6 +15,7 @@ import threading
 import time
 import sys
 import os
+
 
 @kSingleton
 class Kott:
@@ -27,7 +28,7 @@ class Kott:
 
     def load_kplug(self, kplug_instance):
         self.__kplugs__.append(kplug_instance)
-        self.__kplugs__.sort(lambda x,y: x.priority < y.priority)
+        self.__kplugs__.sort(lambda x, y: x.priority < y.priority)
         return kplug_instance.on_load()
 
     def get(self, key, **kwargs):
@@ -35,9 +36,8 @@ class Kott:
 
         tp = type(value)
         for c_kplug in self.__kplugs__:
-            # print type(EVERYTHING())
-            # if c_kplug.data_type == type(EVERYTHING()) or tp == c_kplug.data_type:
-            value = c_kplug.on_get(key, value, **kwargs)
+            if isinstance(value, c_kplug.data_type):
+                value = c_kplug.on_get(key, value, **kwargs)
 
         return value
 
@@ -60,9 +60,9 @@ class Kott:
         for key in self.__mem__:
             tp = type(self.__mem__[key])
             for c_kplug in self.__kplugs__:
-                # if c_kplug.data_type() == type(EVERYTHING()) or tp == c_kplug.data_type():
-                if c_kplug.on_find_visit(key, self.__mem__[key], **kwargs):
-                    found_keys.append(key)
+                if isinstance(self.__mem__[key], c_kplug.data_type):
+                    if c_kplug.on_find_visit(key, self.__mem__[key], **kwargs):
+                        found_keys.append(key)
         return found_keys
 
     def delete(self, key, **kwargs):
@@ -71,8 +71,3 @@ class Kott:
 
     def cleanup(self, **kwargs):
         self.__mem__ = {}
-
-# print (type(Kott))
-# k = Kott().set("blah blah")
-# print Kott().get(k)
-# print Kott().pop(k)

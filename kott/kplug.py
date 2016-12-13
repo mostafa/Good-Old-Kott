@@ -1,8 +1,5 @@
-class EVERYTHING(object):
-    pass
-
 class KPlugBase:
-    _data_type_ = type(EVERYTHING())
+    _data_type_ = object
     _priority_ = 99
 
     def __init__(self):
