@@ -21,7 +21,6 @@ import os
 class Kott:
     __mem__ = {}
     __kplugs__ = []
-    KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
 
     def __init__(self):
         pass
