@@ -34,7 +34,8 @@ class Kott:
 
         tp = type(value)
         for c_kplug in self.__kplugs__:
-            if isinstance(value, c_kplug.data_type):
+            if isinstance(value, c_kplug.data_type) and \
+               c_kplug.has_keyword(**kwargs):
                 value = c_kplug.on_get(key, value, **kwargs)
 
         return value
@@ -42,7 +43,8 @@ class Kott:
     def set(self, data, **kwargs):
         key = md5.md5(krand.kRandStr(16) + str(time.time())).hexdigest()
         for c_kplug in self.__kplugs__:
-            if isinstance(data, c_kplug.data_type):
+            if isinstance(data, c_kplug.data_type) and \
+               c_kplug.has_keyword(**kwargs):
                 data = c_kplug.on_set(key, data, **kwargs)
         self.__mem__[key] = data
         return key
@@ -58,11 +60,28 @@ class Kott:
         found_keys = []
         for key in self.__mem__:
             tp = type(self.__mem__[key])
+            kplug_res = {}
             for c_kplug in self.__kplugs__:
-                if isinstance(self.__mem__[key], c_kplug.data_type):
-                    if c_kplug.on_find_visit(key, self.__mem__[key], **kwargs):
-                        found_keys.append(key)
+                kplug_res[c_kplug] = True
+                if isinstance(self.__mem__[key], c_kplug.data_type) and \
+                   c_kplug.has_keyword(**kwargs):
+                    kplug_res[c_kplug] = c_kplug.on_find_visit(key, self.__mem__[key], **kwargs)
+
+            and_all = True
+            for plug in kplug_res:
+                and_all = and_all and kplug_res[plug]
+            if and_all:
+                found_keys.append(key)
+
         return found_keys
+
+    def do(self, **kwargs):
+        for key in self.__mem__:
+            tp = type(self.__mem__[key])
+            for c_kplug in self.__kplugs__:
+                if isinstance(self.__mem__[key], c_kplug.data_type) and \
+                   c_kplug.has_keyword(**kwargs):
+                    c_kplug.on_do_visit(key, self.__mem__[key], **kwargs)
 
     def delete(self, key, **kwargs):
         if key in self.__mem__:

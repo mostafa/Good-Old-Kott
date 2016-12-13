@@ -5,29 +5,28 @@ from kott.kcore.ksingleton import kSingleton
 @kSingleton
 class KTags(KPlugBase):
     __tag__ = {}
+    _keywords_ = ["tag"]
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
 
     def __init__(self):
         _priority_ = 10
 
     def on_set(self, key, value, **kwargs):
-        if "tag" in kwargs:
-            # TODO: KLog
-            # print ("Setting tag:" + kwargs["tag"] +
-            #        " for key:" + str(key) + ", value: " + str(value))
-            if kwargs["tag"] in self.__tag__:
-                self.__tag__[kwargs["tag"]].append(key)
-            else:
-                self.__tag__[kwargs["tag"]] = [key]
+        # TODO: KLog
+        # print ("Setting tag:" + kwargs["tag"] +
+        #        " for key:" + str(key) + ", value: " + str(value))
+        if kwargs["tag"] in self.__tag__:
+            self.__tag__[kwargs["tag"]].append(key)
+        else:
+            self.__tag__[kwargs["tag"]] = [key]
+        
         return value
 
     def on_find_visit(self, key, value, **kwargs):
-        if "tag" in kwargs:
-            if kwargs["tag"] in self.__tag__:
-                if key in self.__tag__[kwargs["tag"]]:
-                    # TODO: KLog
-                    # print ("Found tag:" + kwargs["tag"] +
-                    #        " on key:" + str(key) + ", value: " + str(value))
-                    return True
-            return False
+        if kwargs["tag"] in self.__tag__:
+            if key in self.__tag__[kwargs["tag"]]:
+                # TODO: KLog
+                # print ("Found tag:" + kwargs["tag"] +
+                #        " on key:" + str(key) + ", value: " + str(value))
+                return True
         return False

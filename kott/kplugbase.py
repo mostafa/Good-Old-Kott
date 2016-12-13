@@ -1,6 +1,7 @@
 class KPlugBase:
     _data_type_ = object
     _priority_ = 99
+    _keywords_ = []
 
     def __init__(self):
         pass
@@ -12,6 +13,12 @@ class KPlugBase:
     @property
     def priority(self):
         return self._priority_
+
+    def has_keyword(self, **kwargs):
+        for k in self._keywords_:
+            if k in kwargs:
+                return True
+        return False
 
     def on_set(self, key, value, **kwargs):
         return value
@@ -26,4 +33,7 @@ class KPlugBase:
         pass
 
     def on_find_visit(self, key, value, **kwargs):
-        return False
+        return True
+
+    def on_do_visit(self, key, value, **kwargs):
+        pass
