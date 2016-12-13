@@ -1,4 +1,4 @@
-class EVERYTHING:
+class EVERYTHING(object):
     pass
 
 class KPlugBase:
@@ -29,4 +29,4 @@ class KPlugBase:
         pass
 
     def on_find_visit(self, key, value, **kwargs):
-        pass
+        return False

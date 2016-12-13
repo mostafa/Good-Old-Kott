@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+# TODO: KExceptoin, check data type,
 """docstring."""
 
 from kcore.ksingleton import kSingleton
 from kcore import krand
-from kplug import KPlugBase
+from kplug import KPlugBase, EVERYTHING
 from kcore.kconf import __kott_kplugs_dir__
 
 import md5
@@ -18,10 +19,7 @@ import os
 @kSingleton
 class Kott:
     __mem__ = {}
-    __tag__ = {}
     __kplugs__ = []
-    # __write_semaphore__ = asyncio.Lock()
-
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
 
     def __init__(self):
@@ -29,14 +27,17 @@ class Kott:
 
     def load_kplug(self, kplug_instance):
         self.__kplugs__.append(kplug_instance)
-        self.__kplugs__.sort(lambda x,y: x.priority() < y.priority())
+        self.__kplugs__.sort(lambda x,y: x.priority < y.priority)
         return kplug_instance.on_load()
 
     def get(self, key, **kwargs):
         value = self.__mem__[key]
 
-        for kplug in self.__kplugs__:
-            value = kplug.on_get(key, value, **kwargs)
+        tp = type(value)
+        for c_kplug in self.__kplugs__:
+            # print type(EVERYTHING())
+            # if c_kplug.data_type == type(EVERYTHING()) or tp == c_kplug.data_type:
+            value = c_kplug.on_get(key, value, **kwargs)
 
         return value
 
@@ -53,6 +54,16 @@ class Kott:
             self.delete(key, **kwargs)
             return data
         return None
+
+    def find(self, **kwargs):
+        found_keys = []
+        for key in self.__mem__:
+            tp = type(self.__mem__[key])
+            for c_kplug in self.__kplugs__:
+                # if c_kplug.data_type() == type(EVERYTHING()) or tp == c_kplug.data_type():
+                if c_kplug.on_find_visit(key, self.__mem__[key], **kwargs):
+                    found_keys.append(key)
+        return found_keys
 
     def delete(self, key, **kwargs):
         if key in self.__mem__:

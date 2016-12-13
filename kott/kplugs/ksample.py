@@ -9,10 +9,12 @@ class KSample( kplug.KPlugBase ):
     def on_load(self):
         print ("KSample is up! (" + self.some_shared_data + ")")
 
-    def on_get(self, key, value, **kargs):
-        print ("KSample on_get(" + kargs["sample_arg"] + ")! (" + self.some_shared_data + ")")
+    def on_get(self, key, value, **kwargs):
+        if "sample_arg" in kwargs:
+            print ("KSample on_get(" + kwargs["sample_arg"] + ")! (" + self.some_shared_data + ")")
         return value
 
-    def on_set(self, key, value, **kargs):
-        print ("KSample on_get(" + kargs["sample_arg"] + ")! (" + self.some_shared_data + ")")
+    def on_set(self, key, value, **kwargs):
+        if "sample_arg" in kwargs:
+            print ("KSample on_get(" + kwargs["sample_arg"] + ")! (" + self.some_shared_data + ")")
         return value
