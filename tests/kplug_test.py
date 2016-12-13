@@ -32,11 +32,12 @@ class KStudent(KPlugBase):
     _keywords_ = ["name"]
 
     def on_find_visit(self, key, value, **kwargs):
-        if "name" in kwargs:
-            if value.name == kwargs["name"]:
-                return True
-            return False
-        return True
+        if value.name == kwargs["name"]:
+            return True
+        return False
+
+    def kplug_do_kiss(self, key, value, **kwargs):
+        print "I'm kissing " + str(value)
 
 # @kSingleton
 # class KTeacher(KPlugBase):
@@ -54,27 +55,32 @@ Kott().set("Bad Kotto!!!", tag="bad")
 s1 = Student("Sina", "F-")
 s2 = Student("Mostafa", "F+")
 s3 = Student("Sami", "C-")
+s4 = Student("Yalda", "B+")
 
 Kott().set(s1, tag="Koder")
 Kott().set(s2, tag="Koder")
 Kott().set(s3, tag="Koder")
+Kott().set(s4, tag="Coder")
 
 print ("\nFinding the bad...")
 res = Kott().find(tag="bad")
 for r in res:
     print Kott().get(r)
 
-print ("\nFinding Koder Sina...")
+print ("\nFinding all student whose names are Sina and was tagged as Koder...")
 res = Kott().find(name="Sina", tag="Koder")
 for r in res:
     print Kott().get(r)
 
-print ("\nFinding Coder Sina...")
+print ("\nFinding all students whose names are Sina and was tagged as Coder...")
 res = Kott().find(name="Sina", tag="Coder")
 for r in res:
     print Kott().get(r)
 
-print ("\nFinding Koders...")
+print ("\nFinding all students tagged as Koder...")
 res = Kott().find(tag="Koder")
 for r in res:
     print Kott().get(r)
+
+print ("\nDoing all Coders...")
+Kott().do("kiss", tag="Coder")

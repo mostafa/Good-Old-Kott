@@ -1,3 +1,5 @@
+import inspect
+
 class KPlugBase:
     _data_type_ = object
     _priority_ = 99
@@ -34,6 +36,3 @@ class KPlugBase:
 
     def on_find_visit(self, key, value, **kwargs):
         return True
-
-    def on_do_visit(self, key, value, **kwargs):
-        pass

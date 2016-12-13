@@ -6,3 +6,4 @@ __kott_author_email__ = ""
 __kott_url__ = ""
 __kott_package_dir__ = {"": "kott"}
 __kott_packages__ = ["kott", "kott.kcore", "kott.kplugs"]
+__kplug_do_prefix__ = "kplug_do_"

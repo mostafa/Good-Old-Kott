@@ -5,6 +5,7 @@
 from kcore.ksingleton import kSingleton
 from kcore import krand
 from kplugbase import KPlugBase
+from kcore.kconf import __kplug_do_prefix__
 
 import md5
 import time
@@ -75,17 +76,33 @@ class Kott:
 
         return found_keys
 
-    def do(self, **kwargs):
-        for key in self.__mem__:
-            tp = type(self.__mem__[key])
-            for c_kplug in self.__kplugs__:
-                if isinstance(self.__mem__[key], c_kplug.data_type) and \
-                   c_kplug.has_keyword(**kwargs):
-                    c_kplug.on_do_visit(key, self.__mem__[key], **kwargs)
+    def do(self, *args, **kwargs):
+        do_keys = self.find(**kwargs)
+        # print (do_keys)
 
+        for c_kplug in self.__kplugs__:
+            for method in args:
+                try:
+                    func = getattr(c_kplug, __kplug_do_prefix__ + method)
+                    # print (func)
+                    for key in do_keys:
+                        func(key, self.__mem__[key], **kwargs)
+                except Exception as e:
+                    # print ("method is not there")
+                    pass
+            # end of for method
+        # end of for kplugs
     def delete(self, key, **kwargs):
         if key in self.__mem__:
-            self.__mem__.pop(key)
+            value = self.__mem__[key]
+
+            tp = type(value)
+            for c_kplug in self.__kplugs__:
+                if isinstance(value, c_kplug.data_type) and \
+                   c_kplug.has_keyword(**kwargs):
+                    value = c_kplug.on_delete(key, value, **kwargs)
+            del self.__mem__[key]
 
     def cleanup(self, **kwargs):
-        self.__mem__ = {}
+        for key in self.__mem__.keys():
+            self.delete(key, **kwargs)
