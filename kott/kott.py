@@ -4,8 +4,7 @@
 
 from kcore.ksingleton import kSingleton
 from kcore import krand
-from kplug import KPlugBase
-from kcore.kconf import __kott_kplugs_dir__
+from kplugbase import KPlugBase
 
 import md5
 import time
@@ -42,8 +41,9 @@ class Kott:
 
     def set(self, data, **kwargs):
         key = md5.md5(krand.kRandStr(16) + str(time.time())).hexdigest()
-        for kplug in self.__kplugs__:
-            data = kplug.on_set(key, data, **kwargs)
+        for c_kplug in self.__kplugs__:
+            if isinstance(data, c_kplug.data_type):
+                data = c_kplug.on_set(key, data, **kwargs)
         self.__mem__[key] = data
         return key
 

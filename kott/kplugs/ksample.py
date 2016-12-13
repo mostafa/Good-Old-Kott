@@ -1,9 +1,9 @@
-from kott import kplug
+from kott.kplugbase import KPlugBase
 from kott.kcore.ksingleton import kSingleton
 
 from kott.kcore import krand
 @kSingleton
-class KSample( kplug.KPlugBase ):
+class KSample(KPlugBase):
     some_shared_data = "Singleton Shared Data " + krand.kRandStr(4)
 
     def on_load(self):

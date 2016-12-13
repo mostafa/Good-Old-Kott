@@ -1,9 +1,9 @@
-from kott import kplug
+from kott.kplugbase import KPlugBase
 from kott.kcore.ksingleton import kSingleton
 
 
 @kSingleton
-class KTags(kplug.KPlugBase):
+class KTags(KPlugBase):
     __tag__ = {}
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
 
@@ -12,8 +12,9 @@ class KTags(kplug.KPlugBase):
 
     def on_set(self, key, value, **kwargs):
         if "tag" in kwargs:
-            print ("Setting tag:" + kwargs["tag"] +
-                   " for key:" + key + ", value: " + value)
+            # TODO: KLog
+            # print ("Setting tag:" + kwargs["tag"] +
+            #        " for key:" + str(key) + ", value: " + str(value))
             if kwargs["tag"] in self.__tag__:
                 self.__tag__[kwargs["tag"]].append(key)
             else:
@@ -24,8 +25,9 @@ class KTags(kplug.KPlugBase):
         if "tag" in kwargs:
             if kwargs["tag"] in self.__tag__:
                 if key in self.__tag__[kwargs["tag"]]:
-                    print ("Found tag:" + kwargs["tag"] +
-                           " on key:" + key + ", value: " + value)
+                    # TODO: KLog
+                    # print ("Found tag:" + kwargs["tag"] +
+                    #        " on key:" + str(key) + ", value: " + str(value))
                     return True
             return False
         return False
