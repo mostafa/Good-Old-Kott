@@ -25,7 +25,6 @@ class Student:
 #     def __str__(self):
 #         return "Teacher: " + self.name + ", Students: " + len(self.teacher_students)
 
-
 @kSingleton
 class KStudent(KPlugBase):
     _data_type_ = Student

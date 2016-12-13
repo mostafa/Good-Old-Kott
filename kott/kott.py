@@ -92,6 +92,7 @@ class Kott:
                     pass
             # end of for method
         # end of for kplugs
+
     def delete(self, key, **kwargs):
         if key in self.__mem__:
             value = self.__mem__[key]

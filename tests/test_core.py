@@ -1,6 +1,7 @@
 from kott import Kott
 from kott.kplugs import ksample
 from kott.kplugs import ktags
+from kott.kplugs import ktimer_pool
 
 print ("---------- Testing Kott ----------")
 object_key = Kott().set("Hello Kott!")
@@ -16,7 +17,7 @@ object_value = Kott().get(object_key, sample_arg="A Sample Argument for GET agai
 print ("Key: " + str(object_key) + ", Value: " + str(object_value))
 Kott().delete(object_key)
 
-print ("---------- Testing KTag ----------")
+print ("---------- Testing KTags ----------")
 Kott().load_kplug(ktags.KTags())
 Kott().set("Tagged value no.1", tag="Test Tag")
 Kott().set("Tagged value no.2", tag="Test Tag")
@@ -24,5 +25,6 @@ Kott().set("Tagged value no.3", tag="Test Tag")
 result = Kott().find(tag="Test Tag")
 for r in result:
     print Kott().get(r)
+
 
 Kott().cleanup()
