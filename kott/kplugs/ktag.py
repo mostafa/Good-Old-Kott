@@ -1,7 +1,7 @@
 from kott.kplugbase import KPlugBase
 
 
-class KTags(KPlugBase):
+class KTag(KPlugBase):
     __tag__ = {}
     _keywords_ = ["tag"]
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
@@ -17,7 +17,7 @@ class KTags(KPlugBase):
             self.__tag__[kwargs["tag"]].append(key)
         else:
             self.__tag__[kwargs["tag"]] = [key]
-        
+
         return value
 
     def on_find_visit(self, key, value, **kwargs):

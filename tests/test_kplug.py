@@ -1,7 +1,7 @@
 from kott import Kott
 from kott.kplugbase import KPlugBase
-from kott.kplugs import ksample
-from kott.kplugs import ktags
+from kott.kplugs import KSample
+from kott.kplugs import KTag
 
 
 class Student:
@@ -47,7 +47,7 @@ class KStudent(KPlugBase):
 #         pass
 
 Kott().load_kplug(KStudent())
-Kott().load_kplug(ktags.KTags())
+Kott().load_kplug(KTag())
 Kott().set("Hello Kotto!")
 Kott().set("Wuzzup Kotto?")
 Kott().set("Bad Kotto!!!", tag="bad")

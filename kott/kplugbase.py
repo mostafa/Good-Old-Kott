@@ -20,6 +20,8 @@ class KPlugBase(object):
         return self._priority_
 
     def has_keyword(self, **kwargs):
+        # print self._keywords_
+        # print kwargs
         for k in self._keywords_:
             if k in kwargs:
                 return True
@@ -38,4 +40,4 @@ class KPlugBase(object):
         pass
 
     def on_find_visit(self, key, value, **kwargs):
-        return True
+        return False

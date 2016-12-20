@@ -33,7 +33,6 @@ class Kott:
     def get(self, key, **kwargs):
         value = self.__mem__[key]
 
-        tp = type(value)
         for c_kplug in self.__kplugs__:
             if isinstance(value, c_kplug.data_type) and \
                c_kplug.has_keyword(**kwargs):
@@ -59,19 +58,23 @@ class Kott:
 
     def find(self, **kwargs):
         found_keys = []
+        # print self.__kplugs__
+        # print kwargs
+
         for key in self.__mem__:
-            tp = type(self.__mem__[key])
             kplug_res = {}
             for c_kplug in self.__kplugs__:
                 kplug_res[c_kplug] = True
+                # print c_kplug.has_keyword(**kwargs)
                 if isinstance(self.__mem__[key], c_kplug.data_type) and \
                    c_kplug.has_keyword(**kwargs):
                     kplug_res[c_kplug] = c_kplug.on_find_visit(key, self.__mem__[key], **kwargs)
 
+            # print kplug_res
             and_all = True
             for plug in kplug_res:
                 and_all = and_all and kplug_res[plug]
-            if and_all:
+            if and_all and len(kplug_res) > 0:
                 found_keys.append(key)
 
         return found_keys
@@ -97,7 +100,6 @@ class Kott:
         if key in self.__mem__:
             value = self.__mem__[key]
 
-            tp = type(value)
             for c_kplug in self.__kplugs__:
                 if isinstance(value, c_kplug.data_type) and \
                    c_kplug.has_keyword(**kwargs):
