@@ -4,17 +4,10 @@
 
 from kcore.ksingleton import kSingleton
 from kcore import krand
-from kplugbase import KPlugBase
 from kcore.kconf import __kplug_do_prefix__
 
 import md5
 import time
-import string
-import random
-import threading
-import time
-import sys
-import os
 
 
 class Kott:
@@ -25,7 +18,24 @@ class Kott:
     def __init__(self):
         pass
 
-    def load_kplug(self, kplug_instance):
+    def load_kplug(self, kplug_name_or_instance):
+        kplug_instance = None
+
+        if (isinstance(kplug_name_or_instance, str)):
+            try:
+                import importlib
+                kplug_module = importlib.import_module(
+                    "kott.kplugs", kplug_name_or_instance)
+                kplug_instance = getattr(
+                    kplug_module, kplug_name_or_instance)()
+            except Exception as e:
+                raise e
+        else:
+            kplug_instance = kplug_name_or_instance
+
+        if kplug_instance is None:
+            return False
+
         self.__kplugs__.append(kplug_instance)
         self.__kplugs__.sort(lambda x, y: x.priority < y.priority)
         return kplug_instance.on_load()
@@ -68,7 +78,8 @@ class Kott:
                 # print c_kplug.has_keyword(**kwargs)
                 if isinstance(self.__mem__[key], c_kplug.data_type) and \
                    c_kplug.has_keyword(**kwargs):
-                    kplug_res[c_kplug] = c_kplug.on_find_visit(key, self.__mem__[key], **kwargs)
+                    kplug_res[c_kplug] = c_kplug.on_find_visit(
+                        key, self.__mem__[key], **kwargs)
 
             # print kplug_res
             and_all = True

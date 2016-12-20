@@ -1,7 +1,5 @@
 from kott import Kott
 from kott.kplugbase import KPlugBase
-from kott.kplugs import KSample
-from kott.kplugs import KTag
 
 
 class Student:
@@ -46,8 +44,19 @@ class KStudent(KPlugBase):
 #     def on_set(self, key, value, **kwargs):
 #         pass
 
+"""
+You can either pass kplug class name (as String) or if it is a custom kplug,
+you can pass the instance of it like this:
+Kott().load_kplug(KSample())
+
+The below code loads the KSample kplug using its class name:
+Kott().load_kplug("KTag")
+
+The below code loads the KSample kplug using its instance:
 Kott().load_kplug(KStudent())
-Kott().load_kplug(KTag())
+"""
+Kott().load_kplug(KStudent())
+Kott().load_kplug("KTag")
 Kott().set("Hello Kotto!")
 Kott().set("Wuzzup Kotto?")
 Kott().set("Bad Kotto!!!", tag="bad")

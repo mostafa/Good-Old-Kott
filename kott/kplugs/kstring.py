@@ -13,6 +13,6 @@ class KString(KPlugBase):
                 return kwargs["str_has"] in str(value)
             elif "str_regex" in kwargs:
                 p = re.compile(kwargs["str_regex"])
-                return p.match(str(value)) is not None
+                return p.search(str(value)) is not None
 
         return False
