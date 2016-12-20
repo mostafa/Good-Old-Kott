@@ -1,8 +1,7 @@
 from kott.kplugbase import KPlugBase
-from kott.kcore.ksingleton import kSingleton
-
 from kott.kcore import krand
-@kSingleton
+
+
 class KSample(KPlugBase):
     _keywords_ = ["sample_arg"]
 

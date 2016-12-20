@@ -2,7 +2,7 @@ from kott import Kott
 from kott.kplugbase import KPlugBase
 from kott.kplugs import ksample
 from kott.kplugs import ktags
-from kott.kcore.ksingleton import kSingleton
+
 
 class Student:
     name = "<unset>"
@@ -23,9 +23,10 @@ class Student:
 #         self.teacher_name = _name
 #
 #     def __str__(self):
-#         return "Teacher: " + self.name + ", Students: " + len(self.teacher_students)
+# return "Teacher: " + self.name + ", Students: " +
+# len(self.teacher_students)
 
-@kSingleton
+
 class KStudent(KPlugBase):
     _data_type_ = Student
     _keywords_ = ["name"]

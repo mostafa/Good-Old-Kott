@@ -1,8 +1,6 @@
 from kott.kplugbase import KPlugBase
-from kott.kcore.ksingleton import kSingleton
 
 
-@kSingleton
 class KTags(KPlugBase):
     __tag__ = {}
     _keywords_ = ["tag"]

@@ -1,12 +1,10 @@
 from kott.kplugbase import KPlugBase
-from kott.kcore.ksingleton import kSingleton
 
 import threading
 import traceback
 import sys
 import os.path
 
-@kSingleton
 class KTimerPool(KPlugBase):
     _data_type_ = threading.Timer
     _keywords_ = ["is_alive"]

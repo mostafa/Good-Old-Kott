@@ -17,8 +17,8 @@ import sys
 import os
 
 
-@kSingleton
 class Kott:
+    __metaclass__ = kSingleton
     __mem__ = {}
     __kplugs__ = []
 

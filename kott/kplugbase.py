@@ -1,6 +1,9 @@
 import inspect
+from kcore.ksingleton import kSingleton
 
-class KPlugBase:
+
+class KPlugBase(object):
+    __metaclass__ = kSingleton
     _data_type_ = object
     _priority_ = 99
     _keywords_ = []
