@@ -5,16 +5,20 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     Kott is an abstract data store, where you can store anything
-    and retrieve it easily. The whole idea is around the concept
-    of a key-value store, but has been abstracted to a level that
-    can accept any form, model, data. This means literally everything.
-    Kott is singleton, so always a single instance of it is available.
+    and retrieve it easily. Our motto is `One Kott fits all!`.
+    The whole idea is around the concept of a key-value store, but
+    has been abstracted to a level that can accept any form, model or
+    data. This means literally everything. Kott is singleton, so there
+    exists only a single instance of it.
 
     >>> from kott import Kott
     >>> id = Kott().set("my test data which is a string!")
-    >>> print(id)  # e.g. 2a65b1a966c7ddc4cb86c9b75e3dbcea
+    >>> len(id)
+    32
+    >>> type(id)
+    <type 'str'>
     >>> Kott().get(id)
-    my test data which is a string!
+    'my test data which is a string!'
 
     As you can see, there is almost no need for storing the keys or
     saving them somewhere, because you can always find your data.
@@ -48,11 +52,10 @@
     The find method looks for keywords in each kplug, and starts searching
     one by one to find the matching value, then it returns their IDs.
 
-    A sample kplug, KSample, is provided as a example for kplug developers.
+    A sample kplug, KSample, is provided as an example for kplug developers.
 
     :copyright: (c) 2016 by Hossein Ghannad, Sina Hatefmatbue, Mostafa Moradian
     :license: TBD, see LICENSE for more details.
-
 """
 
 from kcore.ksingleton import kSingleton
@@ -90,7 +93,7 @@ class Kott:
             return False
 
         self.__kplugs__.append(kplug_instance)
-        self.__kplugs__.sort(lambda x, y: x.priority < y.priority)
+        self.__kplugs__.sort(key=lambda obj: obj.priority)
         return kplug_instance.on_load()
 
     def get(self, key, **kwargs):
@@ -173,3 +176,9 @@ class Kott:
     def cleanup(self, **kwargs):
         for key in self.__mem__.keys():
             self.delete(key, **kwargs)
+
+
+# Doctest does not work correctly, because of relative imports in code
+# if __name__ == "__main__":
+#     import doctest
+#     doctest.testmod(verbose=False, optionflags=doctest.ELLIPSIS)
