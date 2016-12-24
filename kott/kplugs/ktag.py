@@ -2,6 +2,7 @@ from kott.kplugbase import KPlugBase
 
 
 class KTag(KPlugBase):
+    _priority_ = 1
     __tag__ = {}
     _keywords_ = ["tag"]
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"

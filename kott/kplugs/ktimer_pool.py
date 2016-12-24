@@ -6,7 +6,7 @@ import sys
 import os.path
 
 class KTimerPool(KPlugBase):
-    _data_type_ = threading.Timer
+    _data_type_ = threading._Timer # threading.Timer is a function to create Timer object, but the threading._Timer is the Timer class
     _keywords_ = ["is_alive"]
 
     def on_find_visit(self, key, value, **kwargs):

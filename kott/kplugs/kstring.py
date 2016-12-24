@@ -2,6 +2,7 @@ from kott.kplugbase import KPlugBase
 import re
 
 class KString(KPlugBase):
+    _priority_ = 0
     _keywords_ = ["str_equal", "str_has", "str_regex"]
 
     def __init__(self):
