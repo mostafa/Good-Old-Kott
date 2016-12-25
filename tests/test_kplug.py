@@ -61,9 +61,9 @@ Kott.set("Hello Kotto!")
 Kott.set("Wuzzup Kotto?")
 Kott.set("Bad Kotto!!!", tag="bad")
 
-s1 = Student("Sina", "F-")
+s1 = Student("Sina", "G-")
 s2 = Student("Mostafa", "0+")
-s3 = Student("Sami", "C-")
+s3 = Student("Sami", "Z-")
 s4 = Student("Yalda", "B+")
 
 Kott.set(s1, tag="Koder")

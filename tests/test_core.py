@@ -33,7 +33,7 @@ Kott.set("Tagged value no.3", tag="Test Tag")
 
 Kott.set(Student("Sina", "F-"))
 Kott.set(Student("Mostafa", "F+"))
-Kott.set(Student("Sami", "C-"))
+Kott.set(Student("Sami", "Z-"))
 
 Kott.set(100)
 Kott.set(1000)
