@@ -35,7 +35,7 @@ class KStudent(KPlugBase):
         return False
 
     def kplug_do_kiss(self, key, value, **kwargs):
-        print "I'm kissing " + str(value)
+        print ("I'm kissing " + str(value))
 
 # @kSingleton
 # class KTeacher(KPlugBase):
@@ -47,49 +47,49 @@ class KStudent(KPlugBase):
 """
 You can either pass kplug class name (as String) or if it is a custom kplug,
 you can pass the instance of it like this:
-Kott().load_kplug(KSample())
+Kott.load_kplug(KSample())
 
 The below code loads the KSample kplug using its class name:
-Kott().load_kplug("KTag")
+Kott.load_kplug("KTag")
 
 The below code loads the KSample kplug using its instance:
-Kott().load_kplug(KStudent())
+Kott.load_kplug(KStudent())
 """
-Kott().load_kplug(KStudent())
-Kott().load_kplug("KTag")
-Kott().set("Hello Kotto!")
-Kott().set("Wuzzup Kotto?")
-Kott().set("Bad Kotto!!!", tag="bad")
+Kott.load_kplug(KStudent())
+Kott.load_kplug("KTag")
+Kott.set("Hello Kotto!")
+Kott.set("Wuzzup Kotto?")
+Kott.set("Bad Kotto!!!", tag="bad")
 
 s1 = Student("Sina", "F-")
 s2 = Student("Mostafa", "F+")
 s3 = Student("Sami", "C-")
 s4 = Student("Yalda", "B+")
 
-Kott().set(s1, tag="Koder")
-Kott().set(s2, tag="Koder")
-Kott().set(s3, tag="Koder")
-Kott().set(s4, tag="Coder")
+Kott.set(s1, tag="Koder")
+Kott.set(s2, tag="Koder")
+Kott.set(s3, tag="Koder")
+Kott.set(s4, tag="Coder")
 
 print ("\nFinding the bad...")
-res = Kott().find(tag="bad")
+res = Kott.find(tag="bad")
 for r in res:
-    print Kott().get(r)
+    print (Kott.get(r))
 
 print ("\nFinding all student whose names are Sina and was tagged as Koder...")
-res = Kott().find(name="Sina", tag="Koder")
+res = Kott.find(name="Sina", tag="Koder")
 for r in res:
-    print Kott().get(r)
+    print (Kott.get(r))
 
 print ("\nFinding all students whose names are Sina and was tagged as Coder...")
-res = Kott().find(name="Sina", tag="Coder")
+res = Kott.find(name="Sina", tag="Coder")
 for r in res:
-    print Kott().get(r)
+    print (Kott.get(r))
 
 print ("\nFinding all students tagged as Koder...")
-res = Kott().find(tag="Koder")
+res = Kott.find(tag="Koder")
 for r in res:
-    print Kott().get(r)
+    print (Kott.get(r))
 
 print ("\nDoing all Coders...")
-Kott().do("kiss", tag="Coder")
+Kott.do("kiss", tag="Coder")

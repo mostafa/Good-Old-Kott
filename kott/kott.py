@@ -58,11 +58,12 @@
     :license: TBD, see LICENSE for more details.
 """
 
-from kcore.ksingleton import kSingleton
-from kcore import krand
-from kcore.kconf import __kplug_do_prefix__
+from .kcore.ksingleton import kSingleton
+from .kcore import krand
+from .kcore.kconf import __kplug_do_prefix__
 
-import md5
+# import md5
+import hashlib
 import time
 
 
@@ -107,7 +108,7 @@ class Kott:
         return value
 
     def set(self, data, **kwargs):
-        key = md5.md5(krand.kRandStr(16) + str(time.time())).hexdigest()
+        key = hashlib.md5(krand.kRandStr(16).encode('utf-8') + str(time.time()).encode('utf-8')).hexdigest()
         for c_kplug in self.__kplugs__:
             if isinstance(data, c_kplug.data_type) and \
                c_kplug.has_keyword(**kwargs):
@@ -174,7 +175,7 @@ class Kott:
             del self.__mem__[key]
 
     def cleanup(self, **kwargs):
-        for key in self.__mem__.keys():
+        for key in list(self.__mem__):
             self.delete(key, **kwargs)
 
 
@@ -182,3 +183,9 @@ class Kott:
 # if __name__ == "__main__":
 #     import doctest
 #     doctest.testmod(verbose=False, optionflags=doctest.ELLIPSIS)
+
+# instantiate a singleton object of the Kott class
+# so that it can be accessed like this:
+# Kott.set("test data") instead of Kott().set("test data")
+# TODO: There should be a better way to implement this!
+Kott = Kott()

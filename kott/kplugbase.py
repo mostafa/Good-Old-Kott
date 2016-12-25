@@ -1,5 +1,5 @@
 import inspect
-from kcore.ksingleton import kSingleton
+from .kcore.ksingleton import kSingleton
 
 
 class KPlugBase(object):
