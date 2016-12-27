@@ -62,8 +62,7 @@ from .kcore.ksingleton import kSingleton
 from .kcore import krand
 from .kcore.kconf import __kplug_do_prefix__
 
-# import md5
-import hashlib
+import uuid
 import time
 
 
@@ -108,7 +107,7 @@ class Kott:
         return value
 
     def set(self, data, **kwargs):
-        key = hashlib.md5(krand.kRandStr(16).encode('utf-8') + str(time.time()).encode('utf-8')).hexdigest()
+        key = uuid.uuid1().hex
         for c_kplug in self.__kplugs__:
             if isinstance(data, c_kplug.data_type) and \
                c_kplug.has_keyword(**kwargs):
