@@ -59,7 +59,8 @@
 """
 
 from .kcore.ksingleton import kSingleton
-from .kcore import krand
+# from .kcore import krand
+from .kcore.ktime import kTime
 from .kcore.kconf import __kplug_do_prefix__
 
 import uuid
@@ -122,6 +123,8 @@ class Kott:
             return data
         return None
 
+    # For testing purposes, time diff is calculated!
+    # @kTime
     def find(self, **kwargs):
         found_keys = []
         # print self.__kplugs__
