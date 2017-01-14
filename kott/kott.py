@@ -62,6 +62,7 @@ from .kcore.ksingleton import kSingleton
 # from .kcore import krand
 from .kcore.ktime import kTime
 from .kcore.kconf import __kplug_do_prefix__
+from .kcore.kexception import InvalidKeyword
 
 import uuid
 import time
@@ -105,6 +106,11 @@ class Kott:
         self.__kplugs__.sort(key=lambda obj: obj.priority)
         return kplug_instance.on_load()
 
+    def _check_if_keyword_exists_(self, *args, **kwargs):
+        for keyword in kwargs:
+            if keyword not in self.__kplugs_keywords__:
+                raise InvalidKeyword(keyword)
+
     def get(self, key, **kwargs):
         value = self.__mem__[key]
 
@@ -133,14 +139,15 @@ class Kott:
 
     # For testing purposes, time diff is calculated!
     # @kTime
-    def find(self, **kwargs):
+    def find(self, *args, **kwargs):
         found_keys = []
         # print self.__kplugs__
         # print kwargs
 
-        for argument in kwargs:
-            if argument not in self.__kplugs_keywords__:
-                return []
+        self._check_if_keyword_exists_(*args, **kwargs)
+
+        if len(args) > 0:
+            raise RuntimeWarning("find() does not take positional arguments")
 
         for key in self.__mem__:
             kplug_res = {}

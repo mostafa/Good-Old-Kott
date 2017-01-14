@@ -19,8 +19,10 @@ class kException(object):
             self._exc_args_["else_function"] = kwargs.pop("else_function")
 
         if kwargs.get("finally_function") is not None:
-            self._exc_args_["finally_function"] = kwargs.pop("finally_function")
-        # please visit: http://stackoverflow.com/questions/9005941/python-exception-decorator-how-to-preserve-stacktrace
+            self._exc_args_["finally_function"] = kwargs.pop(
+                "finally_function")
+        # please visit:
+        # http://stackoverflow.com/questions/9005941/python-exception-decorator-how-to-preserve-stacktrace
         try:
             self._result_ = self._function_(*args)
         except Exception:
@@ -44,3 +46,13 @@ class kException(object):
                 self._exc_args_["finally_function"]()
 
         return self._result_
+
+
+class InvalidKeyword(BaseException):
+
+    def __init__(self, keyword):
+        BaseException.__init__(self, keyword)
+        self.message = "Keyword does not exist: " + str(keyword)
+
+    def __str__(self):
+        return self.message
