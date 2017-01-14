@@ -6,7 +6,7 @@ class KString(KPlugBase):
     _keywords_ = ["str_equal", "str_has", "str_regex"]
 
     def __init__(self):
-        _priority_ = 1
+        self._priority_ = 0
 
     def on_find_visit(self, key, value, **kwargs):
         if hasattr(value, "__str__"):

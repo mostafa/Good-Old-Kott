@@ -60,12 +60,12 @@
 
 from .kcore.ksingleton import kSingleton
 # from .kcore import krand
-from .kcore.ktime import kTime
+# from .kcore.ktime import kTime
 from .kcore.kconf import __kplug_do_prefix__
 from .kcore.kexception import InvalidKeyword
 
 import uuid
-import time
+# import time
 
 
 class Kott:
@@ -76,6 +76,7 @@ class Kott:
 
     def __init__(self):
         # TODO: load base kplugs (KString, KTag, ...)
+        # TODO: initialize local (class) attributes
         pass
 
     def load_kplug(self, kplug_name_or_instance):

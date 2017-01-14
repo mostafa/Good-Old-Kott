@@ -8,7 +8,7 @@ class KTag(KPlugBase):
     KOTT_UNTAGGED_DATA = "uncategorized_kott_keys"
 
     def __init__(self):
-        _priority_ = 10
+        self._priority_ = 1
 
     def on_set(self, key, value, **kwargs):
         # TODO: KLog
