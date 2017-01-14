@@ -71,8 +71,10 @@ class Kott:
     __metaclass__ = kSingleton
     __mem__ = {}
     __kplugs__ = []
+    __kplugs_keywords__ = {}
 
     def __init__(self):
+        # TODO: load base kplugs (KString, KTag, ...)
         pass
 
     def load_kplug(self, kplug_name_or_instance):
@@ -92,6 +94,12 @@ class Kott:
 
         if kplug_instance is None:
             return False
+
+        for keyword in kplug_instance.keywords:
+            if keyword in self.__kplugs_keywords__:
+                self.__kplugs_keywords__[keyword].append(kplug_instance)
+            else:
+                self.__kplugs_keywords__[keyword] = [kplug_instance]
 
         self.__kplugs__.append(kplug_instance)
         self.__kplugs__.sort(key=lambda obj: obj.priority)
@@ -129,6 +137,10 @@ class Kott:
         found_keys = []
         # print self.__kplugs__
         # print kwargs
+
+        for argument in kwargs:
+            if argument not in self.__kplugs_keywords__:
+                return []
 
         for key in self.__mem__:
             kplug_res = {}

@@ -1,4 +1,4 @@
-import inspect
+# import inspect
 from .kcore.ksingleton import kSingleton
 
 
@@ -18,6 +18,10 @@ class KPlugBase(object):
     @property
     def priority(self):
         return self._priority_
+
+    @property
+    def keywords(self):
+        return self._keywords_
 
     def has_keyword(self, **kwargs):
         # print self._keywords_

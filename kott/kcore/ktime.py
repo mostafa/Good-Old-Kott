@@ -8,6 +8,8 @@ from functools import wraps
 from time import time
 
 # reference: http://stackoverflow.com/a/27737385
+
+
 def kTime(function):
     @wraps(function)
     def wrap(*args, **kw):
@@ -15,6 +17,6 @@ def kTime(function):
         result = function(*args, **kw)
         te = time()
         print 'function:%r arguments:[%r, %r] took: %2.4f sec' % \
-          (function.__name__, args, kw, te-ts)
+            (function.__name__, args, kw, te - ts)
         return result
     return wrap
