@@ -11,6 +11,7 @@
 + [ ] kConf and that freakin idea!
 + [ ] use UUID as keys instead of hash functions
 + [ ] kGraph
++ [ ] kCache
 + [ ] Making a list of core kplugs
 + [ ] kRest
 + [ ] kObjectToDiskSerializator (Persistance & Recovery from crash etc.)
