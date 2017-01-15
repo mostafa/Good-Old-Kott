@@ -35,7 +35,7 @@ class KPlugBase(object):
         return True
 
     def on_get(self, key, value, **kwargs):
-        return value
+        return True
 
     def on_load(self):
         return True

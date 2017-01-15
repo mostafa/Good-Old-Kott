@@ -16,7 +16,7 @@ def kTime(function):
         ts = time()
         result = function(*args, **kw)
         te = time()
-        print 'function:%r arguments:[%r, %r] took: %2.4f sec' % \
-            (function.__name__, args, kw, te - ts)
+        print ('function:%r arguments:[%r, %r] took: %2.4f sec' %
+               (function.__name__, args, kw, te - ts))
         return result
     return wrap

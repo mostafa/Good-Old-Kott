@@ -7,3 +7,6 @@ __kott_url__ = ""
 __kott_package_dir__ = {"": "kott"}
 __kott_packages__ = ["kott", "kott.kcore", "kott.kplugs"]
 __kplug_do_prefix__ = "kplug_do_"
+__exception_prefix__ = "Kott::"
+__logger_name__ = "KottLogger"
+__logger_filename__ = "kott.log"

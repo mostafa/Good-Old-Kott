@@ -83,4 +83,17 @@ print ("--- Testing update")
 Kott.update(result[0], 99)
 print (sum([Kott.get(i) for i in result]))
 
+print ("--- Update data and set tag on them")
+result = Kott.find(str_regex="^\d+")
+for key in result:
+    Kott.update(key, tag="numerals")
+
+print ([Kott.get(key) for key in Kott.find(tag="numerals")])
+
+print ("--- Update tag")
+for key in result:
+    Kott.update(key, tag="Decimal")
+
+print ([Kott.get(key) for key in Kott.find(tag="Decimal")])
+
 Kott.cleanup()
