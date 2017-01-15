@@ -32,7 +32,7 @@ class KPlugBase(object):
         return False
 
     def on_set(self, key, value, **kwargs):
-        return value
+        return True
 
     def on_get(self, key, value, **kwargs):
         return value

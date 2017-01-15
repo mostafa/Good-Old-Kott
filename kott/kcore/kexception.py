@@ -56,3 +56,35 @@ class InvalidKeyword(BaseException):
 
     def __str__(self):
         return self.message
+
+
+class InvalidKey(BaseException):
+
+    def __init__(self, key):
+        BaseException.__init__(self, key)
+        self.message = "Key does not exist: " + str(key)
+
+    def __str__(self):
+        return self.message
+
+
+class KPlugOnSetError(BaseException):
+
+    def __init__(self, key, kplug_name):
+        BaseException.__init__(self, key)
+        self.message = "Cannot set item [" + key + \
+            "] on KPlug: " + kplug_name
+
+    def __str__(self):
+        return self.message
+
+
+class KPlugOnGetError(BaseException):
+
+    def __init__(self, key, kplug_name):
+        BaseException.__init__(self, key)
+        self.message = "Cannot get item [" + key + \
+            "] from KPlug: " + kplug_name
+
+    def __str__(self):
+        return self.message

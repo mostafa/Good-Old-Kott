@@ -63,6 +63,9 @@ from .kcore.ksingleton import kSingleton
 # from .kcore.ktime import kTime
 from .kcore.kconf import __kplug_do_prefix__
 from .kcore.kexception import InvalidKeyword
+from .kcore.kexception import InvalidKey
+from .kcore.kexception import KPlugOnSetError
+from .kcore.kexception import KPlugOnGetError
 
 import uuid
 # import time
@@ -118,18 +121,33 @@ class Kott:
         for c_kplug in self.__kplugs__:
             if isinstance(value, c_kplug.data_type) and \
                c_kplug.has_keyword(**kwargs):
-                value = c_kplug.on_get(key, value, **kwargs)
+                if not c_kplug.on_get(key, value, **kwargs):
+                    raise KPlugOnGetError(key, c_kplug.__class__.__name__)
 
         return value
 
-    def set(self, data, **kwargs):
-        key = uuid.uuid1().hex
+    def __do_set__(self, key, data, **kwargs):
+
+        if key not in self.__mem__:
+            raise InvalidKey(key)
+
         for c_kplug in self.__kplugs__:
             if isinstance(data, c_kplug.data_type) and \
                c_kplug.has_keyword(**kwargs):
-                data = c_kplug.on_set(key, data, **kwargs)
+                # data = c_kplug.on_set(key, data, **kwargs)
+                if not c_kplug.on_set(key, data, **kwargs):
+                    self.pop(key)
+                    raise KPlugOnSetError(key, c_kplug.__class__.__name__)
         self.__mem__[key] = data
         return key
+
+    def set(self, data, **kwargs):
+        key = uuid.uuid1().hex
+        self.__mem__[key] = None
+        return self.__do_set__(key, data, **kwargs)
+
+    def update(self, key, new_value, **kwargs):
+        return self.__do_set__(key, new_value, **kwargs)
 
     def pop(self, key, **kwargs):
         if key in self.__mem__:

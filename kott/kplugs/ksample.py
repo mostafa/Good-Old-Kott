@@ -12,8 +12,8 @@ class KSample(KPlugBase):
 
     def on_get(self, key, value, **kwargs):
         print ("KSample on_get(" + kwargs["sample_arg"] + ")! (" + self.some_shared_data + ")")
-        return value
+        return True
 
     def on_set(self, key, value, **kwargs):
         print ("KSample on_get(" + kwargs["sample_arg"] + ")! (" + self.some_shared_data + ")")
-        return value
+        return True

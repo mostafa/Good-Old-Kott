@@ -79,4 +79,8 @@ print ("--- Test str_regex 3 (The Magical Sum)")
 result = Kott.find(str_regex="^\d+")
 print (sum([Kott.get(i) for i in result]))
 
+print ("--- Testing update")
+Kott.update(result[0], 99)
+print (sum([Kott.get(i) for i in result]))
+
 Kott.cleanup()

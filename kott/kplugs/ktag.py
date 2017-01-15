@@ -19,7 +19,7 @@ class KTag(KPlugBase):
         else:
             self.__tag__[kwargs["tag"]] = [key]
 
-        return value
+        return True
 
     def on_find_visit(self, key, value, **kwargs):
         if kwargs["tag"] in self.__tag__:
