@@ -35,7 +35,7 @@ class KStudent(KPlugBase):
         return False
 
     def kplug_do_kiss(self, key, value, **kwargs):
-        print ("I'm kissing " + str(value))
+        print("I'm kissing " + str(value))
 
 # @kSingleton
 # class KTeacher(KPlugBase):
@@ -43,6 +43,7 @@ class KStudent(KPlugBase):
 #
 #     def on_set(self, key, value, **kwargs):
 #         pass
+
 
 """
 You can either pass kplug class name (as String) or if it is a custom kplug,
@@ -71,25 +72,25 @@ Kott.set(s2, tag="Koder")
 Kott.set(s3, tag="Koder")
 Kott.set(s4, tag="Coder")
 
-print ("\nFinding the bad...")
+print("\nFinding the bad...")
 res = Kott.find(tag="bad")
 for r in res:
-    print (Kott.get(r))
+    print(Kott.get(r))
 
-print ("\nFinding all student whose names are Sina and was tagged as Koder...")
+print("\nFinding all student whose names are Sina and was tagged as Koder...")
 res = Kott.find(name="Sina", tag="Koder")
 for r in res:
-    print (Kott.get(r))
+    print(Kott.get(r))
 
-print ("\nFinding all students whose names are Sina and was tagged as Coder...")
+print("\nFinding all students whose names are Sina and was tagged as Coder...")
 res = Kott.find(name="Sina", tag="Coder")
 for r in res:
-    print (Kott.get(r))
+    print(Kott.get(r))
 
-print ("\nFinding all students tagged as Koder...")
+print("\nFinding all students tagged as Koder...")
 res = Kott.find(tag="Koder")
 for r in res:
-    print (Kott.get(r))
+    print(Kott.get(r))
 
-print ("\nDoing all Coders...")
+print("\nDoing all Coders...")
 Kott.do("kiss", tag="Coder")

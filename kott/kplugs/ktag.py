@@ -1,3 +1,7 @@
+"""
+    KTag
+"""
+
 from kott.kplugbase import KPlugBase
 
 

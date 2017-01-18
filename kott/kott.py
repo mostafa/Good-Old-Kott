@@ -119,6 +119,7 @@ class Kott:
             if isinstance(value, c_kplug.data_type) and \
                c_kplug.has_keyword(**kwargs):
                 if not c_kplug.on_get(key, value, **kwargs):
+                    self.__semaphore__.release()
                     raise KPlugOnGetError(key, c_kplug.__class__.__name__)
 
         self.__semaphore__.release()
@@ -136,6 +137,7 @@ class Kott:
                 # data = c_kplug.on_set(key, data, **kwargs)
                 if not c_kplug.on_set(key, data, **kwargs):
                     self.pop(key)
+                    self.__semaphore__.release()
                     raise KPlugOnSetError(key, c_kplug.__class__.__name__)
         self.__mem__[key] = data
 
