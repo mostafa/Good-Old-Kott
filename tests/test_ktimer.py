@@ -16,14 +16,12 @@ Kott.set(KTimerPool.create_timer(5, print_me, ["Been called after 5 secs from po
 Kott.set(KTimerPool.create_timer(1, print_me, ["Been called after 1 secs from pool #2"]), pool="pool2")
 
 print("---------- Testing KTimerPool ----------")
-t = Kott.find(pool="pool2")
-Kott.get(t[0]).start()
+pool2 = Kott.find(pool="pool2")
+Kott.get(pool2[0]).start()
 
 Kott.do("kill", pool="pool2")
 Kott.do("start", pool="pool1")
 
-alives = Kott.find(pool="pool1", is_alive=True)
-while len(alives) > 0:
-    print("Still alive:" + str(alives))
+while len(Kott.find(pool="pool1", is_alive=True)) > 0:
+    print("Still alive:" + str(Kott.find(pool="pool1", is_alive=True)))
     time.sleep(1)
-    alives = Kott.find(pool="pool1", is_alive=True)

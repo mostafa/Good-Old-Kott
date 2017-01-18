@@ -14,11 +14,11 @@ import os.path
 
 class KTimerPool(KTag):
     _priority_ = 9
-    _data_type_ = threading.Timer
+    _data_type_ = threading._Timer
     _keywords_ = ["pool", "is_alive"]
 
     def on_set(self, key, value, **kwargs):
-        return super().on_set(key, value, **dict(kwargs, tag=kwargs["pool"]))
+        return super(self.__class__, self).on_set(key, value, **dict(kwargs, tag=kwargs["pool"]))
 
     def on_find_visit(self, key, value, **kwargs):
         alive = True
@@ -26,7 +26,7 @@ class KTimerPool(KTag):
         if "is_alive" in kwargs and kwargs["is_alive"]:
             alive = value.isAlive()
 
-        return alive and super().on_find_visit(key, value, **dict(kwargs, tag=kwargs["pool"]))
+        return alive and super(self.__class__, self).on_find_visit(key, value, **dict(kwargs, tag=kwargs["pool"]))
 
     def kplug_do_find_alives(self, key, value, **kwargs):
         return value.isAlive()
@@ -37,6 +37,7 @@ class KTimerPool(KTag):
     def kplug_do_kill(self, key, value, **kwargs):
         value.cancel()
 
+    @staticmethod
     def create_timer(thread_timeout,
                      thread_callback,
                      *thread_args,
