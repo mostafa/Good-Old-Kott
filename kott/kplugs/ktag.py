@@ -14,10 +14,17 @@ class KTag(KPlugBase):
     def __init__(self):
         self._priority_ = 1
 
+    def __remove_orphans__(self):
+        """Remove orphaned keys, aka keys with empty list"""
+        for tag in self.__tag__.keys():
+            if (self.__tag__[tag] == []):
+                self.__tag__.pop(tag)
+
     def on_set(self, key, value, **kwargs):
         # TODO: KLog
         # print ("Setting tag:" + kwargs["tag"] +
         #        " for key:" + str(key) + ", value: " + str(value))
+
         found_tag = None
         for tag, key_list in self.__tag__.items():
             for current_key in key_list:
@@ -32,6 +39,8 @@ class KTag(KPlugBase):
             self.__tag__[kwargs["tag"]].append(key)
         else:
             self.__tag__[kwargs["tag"]] = [key]
+
+        self.__remove_orphans__()
 
         return True
 
