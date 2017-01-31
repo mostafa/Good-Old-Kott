@@ -113,6 +113,9 @@ class Kott:
 
     def get(self, key, **kwargs):
         self.__semaphore__.acquire(blocking=True)
+        if key not in self.__mem__:
+            self.__semaphore__.release()
+            raise InvalidKey(key)
         value = self.__mem__[key]
 
         for current_kplug in self.__kplugs__:
