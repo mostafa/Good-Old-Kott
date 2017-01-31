@@ -60,7 +60,7 @@
 
 from .kcore.ksingleton import kSingleton
 # from .kcore import krand
-# from .kcore.ktime import kTime
+# from .kcore.klog import kCalcDiffTime
 from .kcore.kconf import __kplug_do_prefix__
 from .kcore.kexception import InvalidKeyword
 from .kcore.kexception import InvalidKey
@@ -147,8 +147,13 @@ class Kott:
 
         self.__semaphore__.release()
 
-        return key
+        if ("verbose" in kwargs and
+                kwargs["verbose"] is True):
+            return None
+        else:
+            return key
 
+    # @kCalcDiffTime
     def set(self, data, **kwargs):
         key = uuid.uuid1().hex
         self.__mem__[key] = None
