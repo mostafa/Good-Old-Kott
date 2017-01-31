@@ -115,12 +115,14 @@ class Kott:
         self.__semaphore__.acquire(blocking=True)
         value = self.__mem__[key]
 
-        for c_kplug in self.__kplugs__:
-            if isinstance(value, c_kplug.data_type) and \
-               c_kplug.has_keyword(**kwargs):
-                if not c_kplug.on_get(key, value, **kwargs):
+        for current_kplug in self.__kplugs__:
+            if self.__check_conformance__(value,
+                                          current_kplug,
+                                          **kwargs):
+                if not current_kplug.on_get(key, value, **kwargs):
                     self.__semaphore__.release()
-                    raise KPlugOnGetError(key, c_kplug.__class__.__name__)
+                    raise KPlugOnGetError(
+                        key, current_kplug.__class__.__name__)
 
         self.__semaphore__.release()
         return value
@@ -131,14 +133,16 @@ class Kott:
         if key not in self.__mem__:
             raise InvalidKey(key)
 
-        for c_kplug in self.__kplugs__:
-            if isinstance(data, c_kplug.data_type) and \
-               c_kplug.has_keyword(**kwargs):
-                # data = c_kplug.on_set(key, data, **kwargs)
-                if not c_kplug.on_set(key, data, **kwargs):
+        for current_kplug in self.__kplugs__:
+            if self.__check_conformance__(data,
+                                          current_kplug,
+                                          **kwargs):
+                # data = current_kplug.on_set(key, data, **kwargs)
+                if not current_kplug.on_set(key, data, **kwargs):
                     self.pop(key)
                     self.__semaphore__.release()
-                    raise KPlugOnSetError(key, c_kplug.__class__.__name__)
+                    raise KPlugOnSetError(
+                        key, current_kplug.__class__.__name__)
         self.__mem__[key] = data
 
         self.__semaphore__.release()
@@ -175,6 +179,12 @@ class Kott:
             if keyword not in self.__kplugs_keywords__:
                 raise InvalidKeyword(keyword)
 
+    def __check_conformance__(self, *args, **kwargs):
+        data = args[0]  # data to be matched against
+        current_kplug = args[1]  # KPlug
+        return (isinstance(data, current_kplug.data_type) and
+                current_kplug.has_keyword(**kwargs))
+
     # For testing purposes, time diff is calculated!
     # @kTime
     def find(self, *args, **kwargs):
@@ -189,12 +199,13 @@ class Kott:
 
         for key in self.__mem__:
             kplug_res = {}
-            for c_kplug in self.__kplugs__:
-                kplug_res[c_kplug] = True
-                # print c_kplug.has_keyword(**kwargs)
-                if isinstance(self.__mem__[key], c_kplug.data_type) and \
-                   c_kplug.has_keyword(**kwargs):
-                    kplug_res[c_kplug] = c_kplug.on_find_visit(
+            for current_kplug in self.__kplugs__:
+                kplug_res[current_kplug] = True
+                # print current_kplug.has_keyword(**kwargs)
+                if self.__check_conformance__(self.__mem__[key],
+                                              current_kplug,
+                                              **kwargs):
+                    kplug_res[current_kplug] = current_kplug.on_find_visit(
                         key, self.__mem__[key], **kwargs)
 
             # print kplug_res
@@ -210,10 +221,10 @@ class Kott:
         do_keys = self.find(**kwargs)
         # print (do_keys)
 
-        for c_kplug in self.__kplugs__:
+        for current_kplug in self.__kplugs__:
             for method in args:
                 try:
-                    func = getattr(c_kplug, __kplug_do_prefix__ + method)
+                    func = getattr(current_kplug, __kplug_do_prefix__ + method)
                     # print (func)
                     for key in do_keys:
                         func(key, self.__mem__[key], **kwargs)
@@ -228,10 +239,11 @@ class Kott:
         if key in self.__mem__:
             value = self.__mem__[key]
 
-            for c_kplug in self.__kplugs__:
-                if isinstance(value, c_kplug.data_type) and \
-                   c_kplug.has_keyword(**kwargs):
-                    value = c_kplug.on_delete(key, value, **kwargs)
+            for current_kplug in self.__kplugs__:
+                if self.__check_conformance__(value,
+                                              current_kplug,
+                                              **kwargs):
+                    value = current_kplug.on_delete(key, value, **kwargs)
             del self.__mem__[key]
         self.__semaphore__.release()
 
