@@ -167,6 +167,9 @@ class Kott:
 
         raise InvalidNumberOfArguments(self.update.__name__, 2, len(args))
 
+    def size(self):
+        return len(self.__mem__.keys())
+
     def pop(self, key, **kwargs):
         if key in self.__mem__:
             data = self.get(key, **kwargs)
@@ -175,6 +178,13 @@ class Kott:
         return None
 
     def __check_if_keyword_exists__(self, *args, **kwargs):
+        # Test for map instead of loop
+        # def _check_existence_(keyword):
+        #     if keyword not in self.__kplugs_keywords__:
+        #         raise InvalidKeyword(keyword)
+        # map(lambda keyword: _check_existence_(
+        #     keyword), self.__kplugs_keywords__)
+
         for keyword in kwargs:
             if keyword not in self.__kplugs_keywords__:
                 raise InvalidKeyword(keyword)
