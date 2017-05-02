@@ -81,7 +81,7 @@ class Kott:
         self.__mem__ = {}
         self.__kplugs__ = []
         self.__kplugs_keywords__ = {}
-        self.__semaphore__ = threading.Semaphore()
+        self.__lock__ = threading.Lock()
 
     def load_kplug(self, kplug_name_or_instance):
         kplug_instance = None
@@ -112,49 +112,43 @@ class Kott:
         return kplug_instance.on_load()
 
     def get(self, key, **kwargs):
-        self.__semaphore__.acquire(blocking=True)
-        if key not in self.__mem__:
-            self.__semaphore__.release()
-            raise InvalidKey(key)
-        value = self.__mem__[key]
+        with self.__lock__:
+            if key not in self.__mem__:
+                self.__lock__.release()
+                raise InvalidKey(key)
+            value = self.__mem__[key]
 
-        for current_kplug in self.__kplugs__:
-            if self.__check_conformance__(value,
-                                          current_kplug,
-                                          **kwargs):
-                if not current_kplug.on_get(key, value, **kwargs):
-                    self.__semaphore__.release()
-                    raise KPlugOnGetError(
-                        key, current_kplug.__class__.__name__)
+            for current_kplug in self.__kplugs__:
+                if self.__check_conformance__(value,
+                                              current_kplug,
+                                              **kwargs):
+                    if not current_kplug.on_get(key, value, **kwargs):
+                        raise KPlugOnGetError(
+                            key, current_kplug.__class__.__name__)
 
-        self.__semaphore__.release()
-        return value
+            return value
 
     def __do_set__(self, key, data, **kwargs):
-        self.__semaphore__.acquire(blocking=True)
+        with self.__lock__:
+            if key not in self.__mem__:
+                raise InvalidKey(key)
 
-        if key not in self.__mem__:
-            raise InvalidKey(key)
+            for current_kplug in self.__kplugs__:
+                if self.__check_conformance__(data,
+                                              current_kplug,
+                                              **kwargs):
+                    # data = current_kplug.on_set(key, data, **kwargs)
+                    if not current_kplug.on_set(key, data, **kwargs):
+                        self.pop(key)
+                        raise KPlugOnSetError(
+                            key, current_kplug.__class__.__name__)
+            self.__mem__[key] = data
 
-        for current_kplug in self.__kplugs__:
-            if self.__check_conformance__(data,
-                                          current_kplug,
-                                          **kwargs):
-                # data = current_kplug.on_set(key, data, **kwargs)
-                if not current_kplug.on_set(key, data, **kwargs):
-                    self.pop(key)
-                    self.__semaphore__.release()
-                    raise KPlugOnSetError(
-                        key, current_kplug.__class__.__name__)
-        self.__mem__[key] = data
-
-        self.__semaphore__.release()
-
-        if ("verbose" in kwargs and
-                kwargs["verbose"] is True):
-            return None
-        else:
-            return key
+            if ("verbose" in kwargs and
+                    kwargs["verbose"] is True):
+                return None
+            else:
+                return key
 
     # @kCalcDiffTime
     def set(self, data, **kwargs):
@@ -253,17 +247,16 @@ class Kott:
         # end of for kplugs
 
     def delete(self, key, **kwargs):
-        self.__semaphore__.acquire(blocking=True)
-        if key in self.__mem__:
-            value = self.__mem__[key]
+        with self.__lock__:
+            if key in self.__mem__:
+                value = self.__mem__[key]
 
-            for current_kplug in self.__kplugs__:
-                if self.__check_conformance__(value,
-                                              current_kplug,
-                                              **kwargs):
-                    value = current_kplug.on_delete(key, value, **kwargs)
-            del self.__mem__[key]
-        self.__semaphore__.release()
+                for current_kplug in self.__kplugs__:
+                    if self.__check_conformance__(value,
+                                                  current_kplug,
+                                                  **kwargs):
+                        value = current_kplug.on_delete(key, value, **kwargs)
+                del self.__mem__[key]
 
     def cleanup(self, **kwargs):
         for key in list(self.__mem__):
