@@ -16,84 +16,133 @@ class Student:
         return "Name: " + self.name + ", Grade: " + self.grade
 
 
-print("---------- Testing Kott ----------")
-object_key = Kott.set("Hello Kott!")
-object_value = Kott.get(object_key)
-print("Key: " + str(object_key) + ", Value: " + str(object_value))
+object_key = ""
+result = []
 
-# Load kplugs
-Kott.load_kplug("KTag")
-Kott.load_kplug("KSample")
-Kott.load_kplug("KString")
 
-# Load sample data
-Kott.set("Tagged value no.1", tag="Test Tag")
-Kott.set("Tagged value no.2", tag="Test Tag")
-Kott.set("Tagged value no.3", tag="Test Tag")
+def test_kott():
+    global object_key
+    print("---------- Testing Kott ----------")
+    object_key = Kott.set("Hello Kott!")
+    object_value = Kott.get(object_key)
+    print("Key: " + str(object_key) + ", Value: " + str(object_value))
+    assert object_value == "Hello Kott!"
 
-Kott.set(Student("Sina", "F-"))
-Kott.set(Student("Mostafa", "F+"))
-Kott.set(Student("Sami", "Z-"))
 
-Kott.set(100)
-Kott.set(1000)
-Kott.set(10000)
+def test_load_kplug():
+    # Load kplugs
+    assert Kott.load_kplug("KTag")
+    assert Kott.load_kplug("KSample")
+    assert Kott.load_kplug("KString")
 
-print("---------- Testing Sample KPlug ----------")
 
-object_value = Kott.get(object_key, sample_arg="A Sample Argument for GET")
-print("Key: " + str(object_key) + ", Value: " + str(object_value))
-object_key = Kott.set("Sample Data", sample_arg="A Sample Argument for SET")
-object_value = Kott.get(object_key, sample_arg="A Sample Argument for GET again!")
-print("Key: " + str(object_key) + ", Value: " + str(object_value))
-Kott.delete(object_key)
+def test_ktag():
+    # Load sample data
+    assert Kott.set("Tagged value no.1", tag="Test Tag")
+    assert Kott.set("Tagged value no.2", tag="Test Tag")
+    assert Kott.set("Tagged value no.3", tag="Test Tag")
 
-print("---------- Testing KTags ----------")
-result = Kott.find(tag="Test Tag")
-for r in result:
-    print(Kott.get(r))
 
-print("---------- Testing KStrings ----------")
+def test_custom_object():
+    assert Kott.set(Student("Sina", "F-"))
+    assert Kott.set(Student("Mostafa", "F+"))
+    assert Kott.set(Student("Sami", "Z-"))
 
-print("--- Test str_equal")
-result = Kott.find(str_equal="Tagged value no.3")
-for r in result:
-    print(Kott.get(r))
 
-print("--- Test str_has")
-result = Kott.find(str_has="Grade")
-for r in result:
-    print(Kott.get(r))
+def test_internal_data_types():
+    assert Kott.set(100)
+    assert Kott.set(1000)
+    assert Kott.set(10000)
 
-print("--- Test str_regex 1")
-result = Kott.find(str_regex=".*F.*")
-for r in result:
-    print(Kott.get(r))
 
-print("--- Test str_regex 2")
-result = Kott.find(str_regex=".*gg\w.*")
-for r in result:
-    print(Kott.get(r))
+def test_ksample():
+    global object_key
+    print("---------- Testing Sample KPlug ----------")
 
-print("--- Test str_regex 3 (The Magical Sum)")
-result = Kott.find(str_regex="^\d+")
-print(sum([Kott.get(i) for i in result]))
+    object_value = Kott.get(object_key, sample_arg="A Sample Argument for GET")
+    print("Key: " + str(object_key) + ", Value: " + str(object_value))
+    assert object_value
 
-print("--- Testing update")
-Kott.update(result[0], 99)
-print(sum([Kott.get(i) for i in result]))
+    object_key = Kott.set(
+        "Sample Data", sample_arg="A Sample Argument for SET")
+    assert object_key
+    object_value = Kott.get(
+        object_key, sample_arg="A Sample Argument for GET again!")
+    assert object_value
+    print("Key: " + str(object_key) + ", Value: " + str(object_value))
 
-print("--- Update data and set tag on them")
-result = Kott.find(str_regex="^\d+")
-for key in result:
-    Kott.update(key, tag="numerals")
+    Kott.delete(object_key)
 
-print([Kott.get(key) for key in Kott.find(tag="numerals")])
 
-print("--- Update tag")
-for key in result:
-    Kott.update(key, tag="Decimal")
+def test_ktag_on_find():
+    global result
+    print("---------- Testing KTags ----------")
+    result = Kott.find(tag="Test Tag")
+    for r in result:
+        print(Kott.get(r))
+        assert Kott.get(r)
 
-print([Kott.get(key) for key in Kott.find(tag="Decimal")])
 
-Kott.cleanup()
+def test_kstring():
+    global result
+    print("---------- Testing KStrings ----------")
+
+    print("--- Test str_equal")
+    result = Kott.find(str_equal="Tagged value no.3")
+    for r in result:
+        print(Kott.get(r))
+        assert Kott.get(r)
+
+    print("--- Test str_has")
+    result = Kott.find(str_has="Grade")
+    for r in result:
+        print(Kott.get(r))
+        assert Kott.get(r)
+
+    print("--- Test str_regex 1")
+    result = Kott.find(str_regex=".*F.*")
+    for r in result:
+        print(Kott.get(r))
+        assert Kott.get(r)
+
+    print("--- Test str_regex 2")
+    result = Kott.find(str_regex=".*gg\w.*")
+    for r in result:
+        print(Kott.get(r))
+        assert Kott.get(r)
+
+    print("--- Test str_regex 3 (The Magical Sum)")
+    result = Kott.find(str_regex="^\d+")
+    assert result
+    print(sum([Kott.get(i) for i in result]))
+    assert sum([Kott.get(i) for i in result])
+
+
+def test_update():
+    global result
+    print("--- Testing update")
+    assert Kott.update(result[0], 99)
+    print(sum([Kott.get(i) for i in result]))
+    assert sum([Kott.get(i) for i in result])
+
+
+def test_update_tag():
+    global result
+    print("--- Update data and set tag on them")
+    result = Kott.find(str_regex="^\d+")
+    for key in result:
+        assert Kott.update(key, tag="numerals")
+
+    print([Kott.get(key) for key in Kott.find(tag="numerals")])
+    assert [Kott.get(key) for key in Kott.find(tag="numerals")]
+
+    print("--- Update tag")
+    for key in result:
+        assert Kott.update(key, tag="Decimal")
+
+    print([Kott.get(key) for key in Kott.find(tag="Decimal")])
+    assert [Kott.get(key) for key in Kott.find(tag="Decimal")]
+
+
+def test_cleanup():
+    Kott.cleanup()

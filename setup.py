@@ -5,7 +5,7 @@ sys.path.append("./kott")
 sys.path.append("./kott/kcore")
 sys.path.append("./kott/kplugs")
 
-from distutils.core import setup
+from setuptools import setup
 import kott.kcore
 import kott.kplugs
 import kott.kcore.kconf
@@ -23,6 +23,10 @@ setup(name=__kott_name__,
       description=__kott_description__,
       author=__kott_author__,
       author_email=__kott_author_email__,
+      license="GPLv3",
       url=__kott_url__,
       # package_dir=__kott_package_dir__,
-      packages=__kott_packages__,)
+      packages=__kott_packages__,
+      setup_requires=['pytest-runner'],
+      tests_require=['pytest'],
+      zip_safe=False)

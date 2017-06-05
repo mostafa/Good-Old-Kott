@@ -239,7 +239,7 @@ class Kott:
                     func = getattr(current_kplug, __kplug_do_prefix__ + method)
                     # print (func)
                     for key in do_keys:
-                        func(key, self.__mem__[key], **kwargs)
+                        return func(key, self.__mem__[key], **kwargs)
                 except Exception as e:
                     # print ("method is not there")
                     pass
